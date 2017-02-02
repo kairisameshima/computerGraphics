@@ -3,6 +3,7 @@ var fragmentShaderHeader = [''               // PREDEFINED STUFF FOR FRAGMENT SH
 ,'   precision highp float;'
 ].join('\n');
 
+
 function gl_start(canvas, vertexShader, fragmentShader) {           // START WEBGL RUNNING IN A CANVAS
 
    setTimeout(function() {
