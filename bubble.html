@@ -11,7 +11,7 @@
             
          /*===========Defining and storing the geometry==============*/
             
-        var vertices = [ -2,-1,-1, 1,-1,-1, 1, 1,-1 ];
+        var vertices = [ -2,-1,-2, 2,-1,-2, 2,1,2 ];
          var colors = [ .7,.5,1, 1,.3,.4, .9,1,.2 ];
          var indices = [ 0,1,2 ];
 
@@ -137,12 +137,11 @@
             window.requestAnimationFrame(animate);
          }
         
-		
-         animate(0);
-          function mdown(e, xyz) {
-gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);      
-          }	
+		function mdown(e, xyz) {
+        
+        }	
           canvas.onmousedown = function(e){mdown(e)}
+         animate(0);
 			
       </script>
    </body>
