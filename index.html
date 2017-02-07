@@ -1,28 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/bootstrap.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="js/bootstrap.js"></script>  
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="js/bootstrap.js">
+	</script>
+    <script>
+        $(function() {
+            $( "#draggable" ).draggable();
+            $( "#droppable" ).droppable({
+                drop: function( event, ui ) {
+                    $( this )
+                    .addClass( "ui-state-highlight" )
+                    .find( "p" )
+                    .html( "Dragon Dropped!!" );
+                }
+            });
+        });
+    </script>
+<!--
+    <script>
+    $('#change-button').click(function() {
+    $('#container').css({
+        'background-color': 'red',
+        'color': 'white',
+        'font-size': '44px'
+    });
+});
+    </script>
+-->
+
+	<title></title>
+    <style> 
+        body{background-color: #efefef;
+             font-size: 18px;},
+    </style>
+    
 </head>
 <body>
-    <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href='#'>Home</a></li>
-        <li role="presentation" class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                Projects 
-            <span class="caret"></span>
-            </a>
-        <ul class="dropdown-menu">
-            <li>
-                <a href="bubble.html">WebGl</a>
-            </li>
-            <li>
-                <a href="live.html">Live WebGl</a>
-            </li>
-        </ul>
-        </li>
-    </ul>
-    <p>I'm hosted with Github</p>
+	<div class="container">
+		<div class="row header-row">
+			<div class="col-12">
+				<div class="page-header">
+					<h1>Kairi's Site <small>A website of things</small></h1>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+            <div class ="col-12">
+                <ul class="nav nav-tabs">
+				<li class="active" role="presentation">
+					<a href='#'>Home</a>
+				</li>
+				<li class="dropdown" role="presentation">
+					<a aria-expanded="false" aria-haspopup="true" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">Projects <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="bubble.html">WebGl</a>
+						</li>
+						<li>
+							<a href="live.html">Live WebGl</a>
+						</li>
+                        <li>
+                            <a href="raytrace.html">Ray Tracing</a>
+                        </li>
+					</ul>
+				</li>
+			</ul>
+            </div>    
+		</div>
+		<div class="row">
+            <div class="col-6">
+                <ul>
+                    <li>
+                        <a href="https://github.com/kairisameshima" target="#">GitHub</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-6">           
+            </div>
+        </div>
+<!--
+        <div class="row">
+            <div class="col-12">
+                <div class="ui-widget-content" id="draggable">
+                    <p>Drag me</p>
+                    <img src="img/dragon.png">
+                </div>
+                <div class="ui-widget-header" id="droppable">
+                    <p>Drop here</p>
+                </div>
+            </div>
+        </div>
+-->
+	</div>
+
 </body>
 </html>
