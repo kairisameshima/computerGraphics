@@ -1,0 +1,273 @@
+<script src=../js/lib2.js></script>
+
+<body bgcolor=black text=white>
+<center>
+<canvas id='canvas1' width=600 height=600></canvas>
+</center>
+</body>
+
+<script id='vs_script' type='x-shader/x-vertex'>
+   attribute vec3 aPos;
+   varying   vec3 vPos;
+   void main() {
+      gl_Position = vec4(aPos, 1.0);
+      vPos = aPos;
+   }
+</script>
+
+<script id='fss_script' type='x-shader/x-fragment'>
+
+---------------------------------------------------------------------
+varying vec3 vPos;                               // Position in image
+uniform float uTime;                             // Time
+
+void main() {
+   vec3 c = vec3(.01,.01,.04);                   // Dark background
+
+   gl_FragColor = vec4(sqrt(c), 1.);             // Final pixel color
+}
+---------------------------------------------------------------------
+BREAKDOWN OF A SIMPLE RAY TRACER.
+
+We start with empty space...
+
+
+<font color=#ffaaaa><i><b>NOTE:</b> All the code <font color=white><!!
+>(in white above)</font> is live-editable.
+
+When you make a coding error, the code will turn <font color=#ffffa0
+>yellow.</i></font></font>
+---------------------------------------------------------------------
+      xx
+---------------------------------------------------------------------
+varying vec3 vPos;                               // Position in image
+uniform float uTime;                             // Time
+
+void main() {
+   vec3 c = vec3(.01,.01,.04);                   // Dark background
+
+   vec3 V = vec3(0.,0.,0.);                      // Ray origin
+   vec3 W = normalize(vec3(vPos.xy, -3.));       // Ray direction
+
+   gl_FragColor = vec4(sqrt(c), 1.);             // Final pixel color
+}
+---------------------------------------------------------------------
+Define ray origin V and ray direction W for this pixel fragment.
+---------------------------------------------------------------------
+        x
+---------------------------------------------------------------------
+varying vec3 vPos;                               // Position in image
+uniform float uTime;                             // Time
+
+void main() {
+   vec3 c = vec3(.01,.01,.04);                   // Dark background
+
+   vec3 V = vec3(0.,0.,0.);                      // Ray origin
+   vec3 W = normalize(vec3(vPos.xy, -3.));       // Ray direction
+   vec4 S = vec4(0.,0.,-5., .5);                 // Sphere x,y,z,r
+
+   gl_FragColor = vec4(sqrt(c), 1.);             // Final pixel color
+}
+---------------------------------------------------------------------
+Define a sphere S as an x,y,z center (0,0,-5) and a radius .5.
+---------------------------------------------------------------------
+   xxxxx
+---------------------------------------------------------------------
+varying vec3 vPos;                               // Position in image
+uniform float uTime;                             // Time
+
+float raytraceSphere(vec3 V, vec3 W, vec4 S) {
+   V -= S.xyz;
+   float B = 2. * dot(V, W);
+   float C = dot(V, V) - S.w * S.w;
+   return B*B < 4. * C ? 0. : 1.;
+}
+
+void main() {
+   vec3 c = vec3(.01,.01,.04);                   // Dark background
+
+   vec3 V = vec3(0.,0.,0.);                      // Ray origin
+   vec3 W = normalize(vec3(vPos.xy, -3.));       // Ray direction
+   vec4 S = vec4(0.,0.,-5., .5);                 // Sphere x,y,z,r
+
+   float t = raytraceSphere(V, W, S);            // Ray trace sphere
+   if (t > 0.)
+      c = vec3(1.,1.,1.);
+
+   gl_FragColor = vec4(sqrt(c), 1.);             // Final pixel color
+}
+---------------------------------------------------------------------
+Very simple version of raytrace -- just see if ray hits the sphere.
+---------------------------------------------------------------------
+      xxx           x
+---------------------------------------------------------------------
+varying vec3 vPos;                               // Position in image
+uniform float uTime;                             // Time
+
+vec2 raytraceSphere(vec3 V, vec3 W, vec4 S) {
+   V -= S.xyz;
+   float B = 2. * dot(V, W);
+   float C = dot(V, V) - S.w * S.w;
+   float discrim = B*B - 4.*C;
+   return discrim < 0. ? vec2(-1., -1)
+                       : vec2(-B - discrim, -B + discrim) / 2.;
+}
+
+void main() {
+   vec3 c = vec3(.01,.01,.04);                   // Dark background
+
+   vec3 V = vec3(0.,0.,0.);                      // Ray origin
+   vec3 W = normalize(vec3(vPos.xy, -3.));       // Ray direction
+   vec4 S = vec4(0.,0.,-5., .5);                 // Sphere x,y,z,r
+
+   vec2 t = raytraceSphere(V, W, S);             // Ray trace sphere
+   if (t.x > 0.)
+      c = vec3(1.,1.,1.) * (.25 + cos(t.x));
+
+   gl_FragColor = vec4(sqrt(c), 1.);             // Final pixel color
+}
+---------------------------------------------------------------------
+Improve raytrace to return distances of near and far roots.
+---------------------------------------------------------------------
+                     xx
+---------------------------------------------------------------------
+varying vec3 vPos;                               // Position in image
+uniform float uTime;                             // Time
+
+vec2 raytraceSphere(vec3 V, vec3 W, vec4 S) {
+   V -= S.xyz;
+   float B = 2. * dot(V, W);
+   float C = dot(V, V) - S.w * S.w;
+   float discrim = B*B - 4.*C;
+   return discrim < 0. ? vec2(-1., -1)
+                       : vec2(-B - discrim, -B + discrim) / 2.;
+}
+
+void main() {
+   vec3 c = vec3(.01,.01,.04);                   // Dark background
+
+   vec3 V = vec3(0.,0.,0.);                      // Ray origin
+   vec3 W = normalize(vec3(vPos.xy, -3.));       // Ray direction
+   vec4 S = vec4(0.,0.,-5., .5);                 // Sphere x,y,z,r
+
+   vec2 t = raytraceSphere(V, W, S);             // Ray trace sphere
+   if (t.x > 0.) {
+      vec3 P = V + t.x * W;                      // Point on sphere
+      vec3 N = normalize(P - S.xyz);             // Surface normal
+      c = .5 + .5 * N;
+   }
+
+   gl_FragColor = vec4(sqrt(c), 1.);             // Final pixel color
+}
+---------------------------------------------------------------------
+Compute surface point and surface normal.
+---------------------------------------------------------------------
+  x                     xxx
+---------------------------------------------------------------------
+varying vec3 vPos;                               // Position in image
+uniform float uTime;                             // Time
+vec3 LDir = normalize(vec3(1.,1.,1.));           // Light direction
+
+vec2 raytraceSphere(vec3 V, vec3 W, vec4 S) {
+   V -= S.xyz;
+   float B = 2. * dot(V, W);
+   float C = dot(V, V) - S.w * S.w;
+   float discrim = B*B - 4.*C;
+   return discrim < 0. ? vec2(-1., -1)
+                       : vec2(-B - discrim, -B + discrim) / 2.;
+}
+
+void main() {
+   vec3 c = vec3(.01,.01,.04);                   // Dark background
+
+   vec3 V = vec3(0.,0.,0.);                      // Ray origin
+   vec3 W = normalize(vec3(vPos.xy, -3.));       // Ray direction
+   vec4 S = vec4(0.,0.,-5., .5);                 // Sphere x,y,z,r
+
+   vec2 t = raytraceSphere(V, W, S);             // Ray trace sphere
+   if (t.x > 0.) {
+      vec3 P = V + t.x * W;                      // Point on sphere
+      vec3 N = normalize(P - S.xyz);             // Surface normal
+      float brightness = max(0., dot(N, LDir));
+      brightness = mix(.1, brightness, .5);      // Diffuse surface
+      c = vec3(.1,1.,.1) * brightness;
+   }
+
+   gl_FragColor = vec4(sqrt(c), 1.);             // Final pixel color
+}
+---------------------------------------------------------------------
+Define a light direction and compute diffuse shading.
+---------------------------------------------------------------------
+  x               x
+---------------------------------------------------------------------
+varying vec3 vPos; // Position in image
+uniform float uTime; // Time
+vec3 LDir = normalize(vec3(uTime * 10., uTime * 5., uTime)); // Light direction
+vec3 LDir2 = normalize(vec3(uTime * 10., uTime * 5., uTime));
+vec2 raytraceSphere(vec3 V, vec3 W, vec4 S) {
+	V -= S.xyz;
+	float B = 2. * dot(V, W);
+	float C = dot(V, V) - S.w * S.w;
+	float discrim = B * B - 4. * C;
+	return discrim < 0. ? vec2(-1., -1) : vec2(-B - discrim, -B + discrim) / 2.;
+}
+void main() {
+	vec3 c = .3 * mix(vec3(.15 * sin(uTime), .1, .1), // Sky color gradient
+		vec3(.2, .4, 1.), .5 + .4 * vPos.y);
+	vec3 V = vec3(0., 0., 0.); // Ray origin
+	vec3 W = normalize(vec3(vPos.xy, -2.)); // Ray direction
+	vec4 S = vec4(cos(uTime), sin(uTime), -5., .3); // Animate sphere
+	vec3 V2 = vec3(0., .2, 0.); // Ray origin
+	vec3 W2 = normalize(vec3(vPos.xy, -2.)); // Ray direction
+	vec4 S2 = vec4(sin(uTime), cos(uTime), -5., .3); // Animate sphere
+	vec3 V3 = vec3(0., .4, 0.); // Ray origin
+	vec3 W3 = normalize(vec3(vPos.xy, -2.)); // Ray direction
+	vec4 S3 = vec4((tan(uTime)), sin(uTime), -5., .3); // Animate sphere
+	vec3 V4 = vec3(0., 1.6, 0.); // Ray origin
+	vec3 W4 = normalize(vec3(vPos.xy, -2.)); // Ray direction
+	vec4 S4 = vec4(sin(uTime), tan(uTime), -5., .3); // Animate sphere
+	vec2 t = raytraceSphere(V, W, S); // Ray trace sphere
+	vec2 t2 = raytraceSphere(V2, W2, S2);
+	vec2 t3 = raytraceSphere(V3, W3, S3);
+	vec2 t4 = raytraceSphere(V4, W4, S4);
+	// Ray trace sphere
+	if (t.x > 0.) {
+		vec3 P = V + t.x * W; // Point on sphere
+		vec3 N = normalize(P - S.xyz); // Surface normal
+		float brightness = max(0., dot(N, LDir));
+		brightness = mix(.1, brightness, .5); // Diffuse surface
+		c = vec3(sin(uTime), cos(uTime), .1) * brightness;
+	}
+	if (t2.x > 0.) {
+		vec3 P = V2 + t2.x * W2; // Point on sphere
+		vec3 N = normalize(P - S2.xyz); // Surface normal
+		float brightness = max(0., dot(N, LDir2));
+		brightness = mix(.1, brightness, .5); // Diffuse surface
+		c = vec3(sin(uTime), cos(uTime), .1) * brightness;
+	}
+	if (t3.x > 0.) {
+		vec3 P = V3 + t3.x * W3; // Point on sphere
+		vec3 N = normalize(P - S3.xyz); // Surface normal
+		float brightness = max(0., dot(N, LDir2));
+		brightness = mix(.1, brightness, .5); // Diffuse surface
+		c = vec3(sin(uTime), cos(uTime), .1) * brightness;
+	}
+	if (t4.x > 0.) {
+		vec3 P = V4 + t4.x * W4; // Point on sphere
+		vec3 N = normalize(P - S4.xyz); // Surface normal
+		float brightness = max(0., dot(N, LDir2));
+		brightness = mix(.1, brightness, .5); // Diffuse surface
+		c = vec3(sin(uTime), cos(uTime), .1) * brightness;
+	}
+	gl_FragColor = vec4(sqrt(c), 1.); // Final pixel color
+}
+---------------------------------------------------------------------
+Animate position of the sphere and light direction.
+</script>
+   
+<script>
+addTextEditor(fss_script.innerHTML.split('---------------------------------------------------------------------'),
+              function() { canvas1.setFragmentShader(this.value); });
+gl_start(canvas1, vs_script.innerHTML);
+</script>
+
