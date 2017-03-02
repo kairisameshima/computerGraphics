@@ -55,7 +55,7 @@ vec3 phong(vec3 N, vec3 E, vec3 A, vec3 D, vec4 S, vec3 P) {
 		float d = max(0., dot(N, LDir)); // Diffuse value
 		vec3 R = reflection(LDir, N);
 		float s = pow(max(0., dot(E, R)), S.a); // Specular value
-		c += uLColors[i+100] * (d * D + s * S.rgb * .1 * S.a)* sin(15.*N*turbulence(N));
+		c += uLColors[i] * (d * D + s * S.rgb * .1 * S.a)* sin(15.*N*turbulence(N));
 	}
 	return c*cos(1.*N*vec3(1.,200.,10.)*noise(N));
 }
