@@ -5,7 +5,7 @@
 <canvas id='canvas1' width=600 height=600></canvas>
 </center>
 </body>
-<script src=noise_shader.js></script>
+<script src=js/noise.js></script>
 
 <script id='vs_script' type='x-shader/x-vertex'>
    attribute vec3 aPos;
@@ -57,9 +57,9 @@ vec3 phong(vec3 N, vec3 E, vec3 A, vec3 D, vec4 S, vec3 P) {
 		float d = max(0., dot(N, LDir)); // Diffuse value
 		vec3 R = reflection(LDir, N);
 		float s = pow(max(0., dot(E, R)), S.a); // Specular value
-		c += uLColors[i] * (d * D + s * S.rgb * .1 * S.a);
+		c += uLColors[i+100] * (d * D + s * S.rgb * .1 * S.a)* sin(15.*N*turbulence(N));
 	}
-	return c;
+	return c*cos(1.*N*vec3(1.,200.,10.)*noise(N));
 }
 vec4 C;
 vec3 V, W, P, E, N;
