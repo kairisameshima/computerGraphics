@@ -38,7 +38,7 @@ var S = {};
         Math.sin(phi)
 ];
    }
-    S.taurus = function(u,v){
+    S.torus = function(u,v){
         var theta = 2 * Math.PI * u;
         var phi = 2 * Math.PI * v;
         var r = 0.3;
@@ -49,5 +49,27 @@ var S = {};
         ];
     }   
        
+    S.kiss = function(u,v){
+        var theta = Math.PI * (u - .5)
+        var phi = 2 * Math.PI * v;
+        var r = 0.3;
+        return [
+            (Math.cos(theta)*Math.cos(phi))*(Math.cos(theta)*Math.cos(phi))*(Math.cos(theta)*Math.cos(phi)),
+            (Math.sin(theta)*Math.cos(phi))*(Math.sin(theta)*Math.cos(phi))*(Math.sin(theta)*Math.cos(phi)),
+            Math.sin(phi)*Math.sin(phi)*Math.sin(phi)
+            
+        ];
+    }
+    S.roman = function(u,v){
+        var theta = 2 * Math.PI * u;
+        var phi = Math.PI * (v - .5)
+        var r = 2;
+        return [
+            .5 * r * Math.sin(2*theta) * Math.pow(Math.sin(phi), 2),
+            .5 * r * Math.sin(theta) * Math.cos(2*phi),
+            .5 * r * Math.cos(theta) * Math.sin(2*phi)
+            
+        ];
+    }
 
    
