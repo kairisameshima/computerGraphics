@@ -1,0 +1,93 @@
+
+<tbody><tr>
+<td><canvas id="canvas1" width="600" height="400"></canvas></td>
+<td width="50"></td>
+<td valign="top">
+<big><b>
+A trippy knot made of Hermite splines
+</b></big>
+</td>
+</tr>
+
+</tbody></table>
+
+<script src="js/drawlib3.js"></script>
+<script src="js/M.js"></script>
+<script src="js/S.js"></script>
+<script>
+
+   var m = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0];
+
+   var Hermite = [ 2,-3,0,1,  -2,3,0,0,  1,-2,1,0,  1,-1,0,0 ];
+
+   function cubic(A, t) { return A[0] * t*t*t + A[1] * t*t + A[2] * t + A[3]; }
+
+   canvas1.update = function(g) {
+      g.lineCap = 'round';
+      g.lineJoin = 'round';
+      g.lineWidth = 1;
+
+      // OUTLINE THE CANVAS
+
+      g.beginPath();
+      g.moveTo(0,0);
+      g.lineTo(this.width,0);
+      g.lineTo(this.width,this.height);
+      g.lineTo(0,this.height);
+      g.lineTo(0,0);
+      g.stroke();
+
+      
+      var O = [
+                [-.75, 0, 0],
+                [-1, -.25, 0],
+                [-.75, -.5, 0],
+                [-.5, -.25, 0],
+                [-.75, 0, 0]
+              ];
+      var R2 = [
+                [   3*Math.cos(time*2),   0,  0],
+//                [   1.6,   0,  0],
+
+                [   0,   3*Math.cos(time*2),  0],
+                [   -3*Math.cos(time*2),   0,  0],
+                [   0,   -3*Math.cos(time*2),  0],
+                [   3*Math.cos(time*2),   0,  0]
+          
+              ];
+    
+      M.identity(m);
+      M.save(m);
+      M.scale(m,.5);
+           	g.lineWidth = 5 * Math.sin(time*10);;
+
+         M.rotateX(m, time);
+         M.rotateZ(m, time);
+
+         var curves = [];
+
+        
+
+         for (var n = 0 ; n < O.length-1 ; n++) {
+            var X = M.transform(Hermite, [ O[n][0], O[n+1][0], R2[n][0], R2[n+1][0] ]);
+            var Y = M.transform(Hermite, [ O[n][1], O[n+1][1], R2[n][1], R2[n+1][1] ]);
+            var Z = M.transform(Hermite, [ O[n][2], O[n+1][2], R2[n][2], R2[n+1][2] ]);
+
+            var curve = [];
+            for (var t = 0 ; t < 1.0001 ; t += 1/20)
+               curve.push( [ cubic(X, t), cubic(Y, t), cubic(Z, t) ] );
+            curves.push(curve);
+         }
+
+        
+         
+
+         this.drawCurves(m, curves );
+
+      M.restore(m);
+   }
+
+   drawCanvases([canvas1]);
+</script>
+
+</body></html>
