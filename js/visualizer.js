@@ -71,9 +71,12 @@ var render = function () {
 		var k = 0;
 		for(var i = 0; i < cubes.length; i++) {
 			for(var j = 0; j < cubes[i].length; j++) {
-				var scale = (array[k] + boost) / 30;
-				cubes[i][j].scale.z = (scale < 1 ? 1 : scale);
-				k += (k < array.length ? 1 : 0);
+				for(var l = 0; l < cubes[i][j].length; l ++){
+					var scale = (array[k] + boost) / 30;
+					cubes[i][j][l].scale.z = (scale < 1 ? 1 : scale);
+					k += (k < array.length ? 1 : 0);
+				}
+				
 			}
 		}
 	}
