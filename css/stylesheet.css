@@ -33,37 +33,12 @@ canvas{
 	text-align: right;
 }
 
-#info a, #blog a {
-	color: inherit;
-	text-decoration: inherit;
-}
-
-#info a:hover, #blog a:hover {
-	text-decoration: underline;
-}
 
 #info div {
 	padding: 0 5px;
 	display: inline-block;
 }
 
-#info div img {
-	position: relative;
-	top: 9px;
-	border-radius: 3px;
-}
-
-#info #artist {
-	margin-right: 5px;
-}
-
-#info #artist .name {
-	font-size: 0.8em;
-}
-
-#info #artist .song {
-
-}
 
 #play {
 	position: fixed;
@@ -83,9 +58,8 @@ canvas{
 	cursor: pointer;
 }
 
-#blog {
-	position: absolute;
-	bottom: 20px;
-	left: 20px;
-	padding: 5px;
+
+
+#warning    {
+    background-color:lightgreen;
 }
