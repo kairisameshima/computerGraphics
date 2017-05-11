@@ -7,29 +7,24 @@ var controls;
 document.body.appendChild(renderer.domElement);
 
 var i = 0;
-for(var x = 0; x < 20; x += 2) {
+for(var x = 0; x < 30; x += 2) {
 	var j = 0;
 	cubes[i] = new Array();
-	for(var y = 0; y < 20; y += 2) {
-		cubes[i][j] = new Array();
-		var k = 0;
-		for(var z  = 0;  z< 20; z += 2){
-			var geometry = new THREE.CubeGeometry(1.5, 1.5, 1.5);
+	for(var y = 0; y < 30; y += 2) {
+		var geometry = new THREE.CubeGeometry(1.5, 1.5, 1.5);
 		
-			var material = new THREE.MeshPhongMaterial({
-				color: randomFairColor(),
-				ambient: 0x808080,
-				specular: 0xffffff,
-				shininess: 20,
-				reflectivity: 5.5 
-			});
+		var material = new THREE.MeshPhongMaterial({
+			color: randomFairColor(),
+			ambient: 0x808080,
+			specular: 0xffffff,
+			shininess: 20,
+			reflectivity: 5.5 
+		});
 		
-			cubes[i][j][k] = new THREE.Mesh(geometry, material);
-			cubes[i][j][k].position = new THREE.Vector3(x, y, z);
+		cubes[i][j] = new THREE.Mesh(geometry, material);
+		cubes[i][j].position = new THREE.Vector3(x, y, 0);
 		
-			scene.add(cubes[i][j][k]);
-			k++;
-		}
+		scene.add(cubes[i][j]);
 		j++;
 	}
 	i++;
@@ -71,12 +66,9 @@ var render = function () {
 		var k = 0;
 		for(var i = 0; i < cubes.length; i++) {
 			for(var j = 0; j < cubes[i].length; j++) {
-				for(var l = 0; l < cubes[i][j].length; l ++){
-					var scale = (array[k] + boost) / 30;
-					cubes[i][j][l].scale.z = (scale < 1 ? 1 : scale);
-					k += (k < array.length ? 1 : 0);
-				}
-				
+				var scale = (array[k] + boost) / 30;
+				cubes[i][j].scale.z = (scale < 1 ? 1 : scale);
+				k += (k < array.length ? 1 : 0);
 			}
 		}
 	}
