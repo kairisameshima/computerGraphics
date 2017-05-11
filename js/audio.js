@@ -1,7 +1,7 @@
 var context;
 var source, sourceJs;
 var analyser;
-var url = 'musicData/lostWoods.mp3';
+var url = 'https://kairisameshima.github.io/musicData/lostWoods.mp3';
 var array = new Array();
 var boost = 0;
 

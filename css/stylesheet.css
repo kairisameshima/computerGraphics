@@ -17,6 +17,7 @@ body{
 	font-weight: 300;
 	font-family: 'Raleway', sans-serif;
 	text-shadow: 0px 0px 5px #333;
+    background:url('../img/woods.png') ;
 }
 
 canvas{
@@ -78,7 +79,7 @@ canvas{
 	left: 0;
 	height: 64px;
 	width: 64px;
-	background: url('../images/play.png') left center no-repeat transparent;
+	background: url('../img/play.png') left center no-repeat transparent;
 	cursor: pointer;
 }
 

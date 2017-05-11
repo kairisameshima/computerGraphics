@@ -46,7 +46,7 @@ directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
 directionalLight.position.set(0, -1, -1);
 scene.add(directionalLight);
 
-directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+directionalLight = new THREE.DirectionalLight(0x00ff00, 0.7);
 directionalLight.position.set(-1, -1, 0);
 scene.add(directionalLight);
 
@@ -84,8 +84,8 @@ renderer.setSize($(window).width(), $(window).height());
 function randomFairColor() {
 	var min = 64;
 	var max = 224;
-	var r = (Math.floor(Math.random() * (max - min + 1)) + min) * 65536;
-	var g = (Math.floor(Math.random() * (max - min + 1)) + min) * 256;
+	var r = (Math.floor(Math.random() * (max - min + 1)) + min);
+	var g = (Math.floor(Math.random() * (max - min + 1)) + min) * 4256;
 	var b = (Math.floor(Math.random() * (max - min + 1)) + min);
 	return r + g + b;
 }
